@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="{{ settings.hero_text }}">
+  <title>{{ settings.site_name }} | Playa del Carmen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <nav id="navbar">
+    <a class="brand" href="#inicio"><span class="brand-mark"><i class="fa-solid fa-water"></i></span>{{ settings.site_name }}</a>
+    <button class="menu-button" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a><a href="#anuncios">Anuncios</a>
+      <a href="#promociones">Promociones</a><a href="#experiencias">Experiencias</a>
+      <a class="nav-cta" href="#contacto">Contacto</a>
+    </div>
+  </nav>
+  <header id="inicio" class="hero" style="--hero-image:url('{{ settings.hero_image }}')">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <span class="eyebrow"><i class="fa-solid fa-location-dot"></i> Playa del Carmen · Riviera Maya</span>
+      <h1>{{ settings.hero_title }}</h1><p>{{ settings.hero_text }}</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#experiencias">Explorar experiencias <i class="fa-solid fa-arrow-right"></i></a>
+        <a class="button glass" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Hablar con nosotros</a>
+      </div>
+    </div>
+    <a href="#servicios" class="scroll-cue" aria-label="Continuar"><span>Descubre</span><i class="fa-solid fa-chevron-down"></i></a>
+  </header>
+  <main>
+    {% set configurations = [
+      ('services','servicios',settings.services_title,settings.services_subtitle,'services-section'),
+      ('announcements','anuncios',settings.announcements_title,settings.announcements_subtitle,'announcements-section'),
+      ('promotions','promociones',settings.promotions_title,settings.promotions_subtitle,'promotions-section'),
+      ('experiences','experiencias',settings.experiences_title,settings.experiences_subtitle,'experiences-section')
+    ] %}
+    {% for kind,anchor,title,subtitle,css_class in configurations %}
+    <section id="{{ anchor }}" class="section {{ css_class }}">
+      <div class="section-heading"><span class="section-kicker">MAYADVENTURE</span><h2>{{ title }}</h2><p>{{ subtitle }}</p></div>
+      <div class="card-grid">
+        {% for item in sections[kind] %}
+        <article class="content-card {{ 'featured-card' if kind == 'promotions' and loop.first else '' }}">
+          <div class="card-image"><img src="{{ item.image or settings.hero_image }}" alt="{{ item.title }}" loading="lazy">{% if item.badge %}<span class="card-badge">{{ item.badge }}</span>{% endif %}</div>
+          <div class="card-body"><h3>{{ item.title }}</h3><p>{{ item.description }}</p>{% if item.button_text %}<a href="{{ item.link or '#contacto' }}" class="text-link">{{ item.button_text }} <i class="fa-solid fa-arrow-right"></i></a>{% endif %}</div>
+        </article>
+        {% else %}<p class="empty-public">Próximamente tendremos novedades para ti.</p>{% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+    <section id="contacto" class="contact-section">
+      <div><span class="section-kicker light">ESTAMOS PARA AYUDARTE</span><h2>{{ settings.contact_title }}</h2><p>{{ settings.contact_text }}</p></div>
+      <div class="contact-actions"><a class="button white" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a><a class="button glass" href="mailto:{{ settings.email }}"><i class="fa-regular fa-envelope"></i> Correo</a></div>
+    </section>
+  </main>
+  <footer>
+    <div><a class="brand" href="#inicio"><span class="brand-mark"><i class="fa-solid fa-water"></i></span>{{ settings.site_name }}</a><p>{{ settings.footer_text }}</p></div>
+    <div><strong>Contacto</strong><p>{{ settings.address }}</p><a href="mailto:{{ settings.email }}">{{ settings.email }}</a></div>
+    <a class="admin-link" href="{{ url_for('login') }}"><i class="fa-solid fa-lock"></i> Administración</a>
+  </footer>
+  <a class="whatsapp-float" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+  <script>
+    const nav=document.querySelector('#navbar'),menu=document.querySelector('.menu-button'),links=document.querySelector('.nav-links');
+    addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
+    menu.addEventListener('click',()=>links.classList.toggle('open'));
+    document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+  </script>
+</body></html>

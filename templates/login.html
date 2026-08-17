@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acceso | MAYADVENTURE</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"></head>
+<body class="login-page"><main class="login-card">
+  <a class="login-brand" href="{{ url_for('home') }}"><span><i class="fa-solid fa-water"></i></span> MAYADVENTURE</a>
+  <div class="login-heading"><small>PANEL DE CONTROL</small><h1>Bienvenido</h1><p>Ingresa tus datos de superusuario para administrar el sitio.</p></div>
+  {% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+  <form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <label>Usuario<div class="input-icon"><i class="fa-regular fa-user"></i><input name="username" autocomplete="username" required autofocus></div></label>
+    <label>Contraseña<div class="input-icon"><i class="fa-solid fa-lock"></i><input type="password" name="password" autocomplete="current-password" required></div></label>
+    <button class="admin-button primary" type="submit">Ingresar <i class="fa-solid fa-arrow-right"></i></button>
+  </form><a class="back-link" href="{{ url_for('home') }}"><i class="fa-solid fa-arrow-left"></i> Volver al sitio</a>
+</main></body></html>

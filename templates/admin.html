@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administración | MAYADVENTURE</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"></head>
+<body class="admin-page">
+<aside class="sidebar">
+  <a class="sidebar-brand" href="{{ url_for('home') }}"><span><i class="fa-solid fa-water"></i></span><div>MAYADVENTURE<small>Panel de control</small></div></a>
+  <nav>
+    <a class="{{ 'active' if selected=='general' }}" href="{{ url_for('admin',section='general') }}"><i class="fa-solid fa-sliders"></i> Información general</a>
+    {% for key,meta in content_types.items() %}<a class="{{ 'active' if selected==key }}" href="{{ url_for('admin',section=key) }}"><i class="fa-solid {{ meta.icon }}"></i> {{ meta.label }}</a>{% endfor %}
+    <a class="{{ 'active' if selected=='account' }}" href="{{ url_for('admin',section='account') }}"><i class="fa-solid fa-shield-halved"></i> Seguridad</a>
+  </nav>
+  <div class="sidebar-bottom"><a href="{{ url_for('home') }}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver sitio público</a>
+    <form action="{{ url_for('logout') }}" method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button></form></div>
+</aside>
+<main class="admin-main"><header class="admin-header"><button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button><div><small>SUPERUSUARIO</small><strong>{{ session.username }}</strong></div></header>
+<div class="admin-content">
+{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+{% if selected=='general' %}
+  <div class="page-title"><div><span>CONFIGURACIÓN</span><h1>Información general</h1><p>Edita textos, contacto y portada.</p></div></div>
+  <form action="{{ url_for('update_settings') }}" method="post" enctype="multipart/form-data"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <section class="admin-panel"><div class="panel-title"><i class="fa-solid fa-house"></i><div><h2>Portada</h2><p>La primera impresión de tus visitantes.</p></div></div>
+      <div class="form-grid"><label>Nombre del sitio<input name="site_name" value="{{ settings.site_name }}"></label><label class="wide">Título principal<input name="hero_title" value="{{ settings.hero_title }}"></label><label class="wide">Texto de bienvenida<textarea name="hero_text">{{ settings.hero_text }}</textarea></label><label>URL de imagen<input name="hero_image" value="{{ settings.hero_image }}"></label><label>O subir imagen<input type="file" name="hero_image_file" accept="image/*"></label></div></section>
+    <section class="admin-panel"><div class="panel-title"><i class="fa-solid fa-heading"></i><div><h2>Títulos de secciones</h2><p>Personaliza cada encabezado.</p></div></div><div class="form-grid">
+      {% for prefix,label in [('services','Servicios'),('announcements','Anuncios'),('promotions','Promociones'),('experiences','Experiencias')] %}<label>{{ label }} — título<input name="{{ prefix }}_title" value="{{ settings[prefix+'_title'] }}"></label><label>{{ label }} — subtítulo<input name="{{ prefix }}_subtitle" value="{{ settings[prefix+'_subtitle'] }}"></label>{% endfor %}</div></section>
+    <section class="admin-panel"><div class="panel-title"><i class="fa-solid fa-address-card"></i><div><h2>Contacto y pie de página</h2></div></div><div class="form-grid"><label>Título de contacto<input name="contact_title" value="{{ settings.contact_title }}"></label><label>Texto de contacto<input name="contact_text" value="{{ settings.contact_text }}"></label><label>WhatsApp con código de país<input name="whatsapp" value="{{ settings.whatsapp }}"></label><label>Correo<input type="email" name="email" value="{{ settings.email }}"></label><label>Dirección<input name="address" value="{{ settings.address }}"></label><label>Descripción del sitio<input name="footer_text" value="{{ settings.footer_text }}"></label></div></section>
+    <div class="sticky-save"><button class="admin-button primary"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></div>
+  </form>
+{% elif selected in content_types %}
+  <div class="page-title"><div><span>CONTENIDO</span><h1>{{ content_types[selected].label }}</h1><p>Agrega, edita, ordena, publica u oculta elementos.</p></div><button class="admin-button primary" onclick="openEditor()"><i class="fa-solid fa-plus"></i> Agregar nuevo</button></div>
+  <div class="items-grid">{% for item in items %}
+    <article class="admin-item"><div class="admin-item-image">{% if item.image %}<img src="{{ item.image }}" alt="">{% else %}<i class="fa-regular fa-image"></i>{% endif %}<span class="status {{ 'published' if item.active else 'hidden' }}">{{ 'Publicado' if item.active else 'Oculto' }}</span></div>
+      <div class="admin-item-body"><small>ORDEN {{ item.position }}</small><h3>{{ item.title }}</h3><p>{{ item.description }}</p><div class="item-actions"><button class="edit-button" data-item='{{ dict(item)|tojson|forceescape }}' onclick="editItem(this)"><i class="fa-regular fa-pen-to-square"></i> Editar</button><form action="{{ url_for('delete_content',item_id=item.id) }}" method="post" onsubmit="return confirm('¿Eliminar este elemento definitivamente?')"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="kind" value="{{ selected }}"><button class="delete-button"><i class="fa-regular fa-trash-can"></i></button></form></div></div>
+    </article>{% else %}<div class="empty-state"><i class="fa-regular fa-folder-open"></i><h3>Aún no hay contenido</h3><p>Agrega el primer elemento de esta sección.</p><button class="admin-button primary" onclick="openEditor()">Agregar contenido</button></div>{% endfor %}</div>
+  <dialog id="editor"><form class="editor-form" action="{{ url_for('save_content') }}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="kind" value="{{ selected }}"><input type="hidden" name="id" id="field-id"><input type="hidden" name="current_image" id="field-current-image">
+    <div class="dialog-header"><div><small>EDITOR DE CONTENIDO</small><h2 id="editor-title">Agregar elemento</h2></div><button type="button" onclick="closeEditor()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="form-grid"><label class="wide">Título *<input name="title" id="field-title" required></label><label class="wide">Descripción<textarea name="description" id="field-description"></textarea></label><label>Subir imagen<input type="file" name="image_file" accept="image/*"></label><label>O usar URL<input name="image_url" id="field-image"></label><label>Etiqueta opcional<input name="badge" id="field-badge"></label><label>Orden<input type="number" name="position" id="field-position" value="0"></label><label>Texto del botón<input name="button_text" id="field-button-text"></label><label>Enlace del botón<input name="link" id="field-link"></label><label class="switch-label"><input type="checkbox" name="active" id="field-active" checked> Mostrar en el sitio</label></div>
+    <div class="dialog-actions"><button type="button" class="admin-button secondary" onclick="closeEditor()">Cancelar</button><button class="admin-button primary"><i class="fa-solid fa-floppy-disk"></i> Guardar</button></div>
+  </form></dialog>
+{% else %}
+  <div class="page-title"><div><span>CUENTA</span><h1>Seguridad</h1><p>Cambia la contraseña del superusuario.</p></div></div>
+  <form class="admin-panel narrow" action="{{ url_for('change_password') }}" method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><div class="panel-title"><i class="fa-solid fa-key"></i><div><h2>Cambiar contraseña</h2><p>Usa al menos 8 caracteres.</p></div></div><div class="form-grid single"><label>Contraseña actual<input type="password" name="current_password" required></label><label>Nueva contraseña<input type="password" name="new_password" minlength="8" required></label></div><br><button class="admin-button primary">Actualizar contraseña</button></form>
+{% endif %}</div></main>
+<script>
+const sidebar=document.querySelector('.sidebar');document.querySelector('.sidebar-toggle').onclick=()=>sidebar.classList.toggle('open');const dialog=document.querySelector('#editor');
+function openEditor(){document.querySelector('.editor-form').reset();document.querySelector('#field-id').value='';document.querySelector('#field-current-image').value='';document.querySelector('#field-active').checked=true;document.querySelector('#editor-title').textContent='Agregar elemento';dialog.showModal()}
+function closeEditor(){dialog.close()}
+function editItem(button){const d=JSON.parse(button.dataset.item);document.querySelector('#editor-title').textContent='Editar elemento';['id','title','description','badge','position','button_text','link'].forEach(k=>document.querySelector('#field-'+k.replaceAll('_','-')).value=d[k]??'');document.querySelector('#field-image').value=d.image||'';document.querySelector('#field-current-image').value=d.image||'';document.querySelector('#field-active').checked=!!d.active;dialog.showModal()}
+if(dialog)dialog.addEventListener('click',e=>{if(e.target===dialog)closeEditor()});
+</script></body></html>

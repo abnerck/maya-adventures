@@ -1,0 +1,25 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local data and uploaded files may contain private information
+data/*.db
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Local development utilities and logs
+cloudflared.exe
+cloudflared-*.log
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
