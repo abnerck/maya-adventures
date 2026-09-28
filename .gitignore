@@ -23,3 +23,8 @@ cloudflared-*.log
 .idea/
 .DS_Store
 Thumbs.db
+
+# All runtime state, session secrets and initial credentials
+data/
+*.zip
+*.tar.gz

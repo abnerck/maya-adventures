@@ -1,73 +1,1098 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="{{ settings.hero_text }}">
-  <title>{{ settings.site_name }} | Playa del Carmen</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ settings.site_name.es }} | Playa del Carmen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        #navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #navbar.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo-maya {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-thickness: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 6px;
+        }
+
+        .lang-btn {
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background: #3498db;
+            border-color: #3498db;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .burger {
+            display: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            min-height: 100svh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                        url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: #333;
+        }
+
+        .btn-small {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        /* Ferry Section */
+        .ferries-section {
+            background: #f8f9fa;
+        }
+
+        .ferry-buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .ferry-button-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .ferry-button-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .ferry-company-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        .ferry-button-logo {
+            width: 150px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 16px;
+        }
+
+        .ferry-company-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            letter-spacing: 0.02em;
+            text-align: center;
+        }
+
+        .ferry-company-link .ferry-cta {
+            font-weight: 600;
+            color: #3498db;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .ferry-company-link:hover .ferry-cta {
+            color: #2980b9;
+        }
+
+        /* Announcements Section */
+        .announcements-section {
+            background: white;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .announcement-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .announcement-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .announcement-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .announcement-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .announcement-card:hover .announcement-img img {
+            transform: scale(1.1);
+        }
+
+        .announcement-content {
+            padding: 25px;
+        }
+
+        .announcement-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .announcement-content p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        /* Maps Section */
+        .map-section {
+            background: #f8f9fa;
+        }
+
+        .map-container {
+            width: 100%;
+            max-width: 1200px;
+            min-height: 320px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: #eef3f8;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tourist-map {
+            width: 100%;
+            max-width: 1100px;
+            max-height: 600px;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        /* Promotions Section */
+        .promotions-section {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .promo-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .promo-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .promo-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .promo-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .promo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+        }
+
+        .promo-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .promo-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .promo-category {
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .promo-duration {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .promo-content h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .promo-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .promo-price {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .old-price {
+            color: #95a5a6;
+            text-decoration: line-through;
+            font-size: 1.1rem;
+        }
+
+        .current-price {
+            color: #27ae60;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .current-price.only {
+            font-size: 1.3rem;
+        }
+
+        .btn-promo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: auto;
+        }
+
+        .btn-promo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .promo-featured {
+            border: 3px solid #f39c12;
+        }
+
+        .promo-featured .promo-badge {
+            background: #f39c12;
+        }
+
+        /* Experiences Section */
+        .experiences-section {
+            background: white;
+        }
+
+        .experience-slider {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .experience-admin {
+            max-width: 1200px;
+            margin: 0 auto 25px;
+            background: #f8f9fa;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .experience-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .experience-form input {
+            border: 1px solid #d4d8dd;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .experience-form button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: white;
+            background: #3498db;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .experience-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .exp-image-container {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .exp-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .experience-card:hover .exp-image-container img {
+            transform: scale(1.1);
+        }
+
+        .exp-content {
+            padding: 25px;
+        }
+
+        .exp-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .exp-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .exp-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-exp {
+            background: #3498db;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-exp:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-exp-delete {
+            background: #d9534f;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background-color: #f0f4f8;
+        }
+
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-modern {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-modern:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .testimonial-author h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .testimonial-rating {
+            color: #f39c12;
+        }
+
+        .testimonial-quote {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 5% 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-column a:hover {
+            color: #3498db;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: #34495e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #3498db;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+        }
+
+        .admin-access {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            margin-top: 14px;
+            padding: 8px 18px;
+            border: 1px solid #95a5a6;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .admin-access:hover { background: #34495e; }
+
+        @media (max-width: 900px) {
+            .experience-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .burger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                right: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+
+            .nav-controls {
+                gap: 8px;
+            }
+
+            .lang-btn {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .hero {
+                background-attachment: scroll;
+                background-position: center top;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .map-container {
+                padding: 8px;
+                min-height: 250px;
+            }
+
+            .promo-grid,
+            .experience-slider,
+            .testimonials-container {
+                grid-template-columns: 1fr;
+            }
+
+            .promo-image {
+                height: 220px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .promo-grid,
+            .experience-slider {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .promo-grid,
+            .experience-slider {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        img { max-width:100%; }
+        .burger { background:transparent; border:0; color:inherit; min-width:44px; min-height:44px; }
+        h1,h2,h3,p,.logo { overflow-wrap:anywhere; }
+        .ferry-button-card,.announcement-card,.promo-item,.footer-column { min-width:0; }
+        .experience-card { flex-shrink:0; }
+        :focus-visible { outline:3px solid #e9a126; outline-offset:4px; }
+        @media(max-width:1100px) {
+            #navbar { padding:10px 16px; gap:8px; }
+            .logo { font-size:clamp(14px,3.6vw,21px); letter-spacing:1px; min-width:0; }
+            .nav-controls { flex-shrink:0; gap:4px; }
+            .lang-btn { padding:6px; min-width:34px; min-height:44px; }
+            .burger { display:block; color:white; }
+            .nav-links { position:fixed; top:64px; left:0; right:0; width:100%; flex-direction:column; gap:0; padding:12px 0; background:#101820; visibility:hidden; opacity:0; pointer-events:none; max-height:calc(100dvh - 64px); overflow-y:auto; }
+            .nav-links.active { visibility:visible; opacity:1; pointer-events:auto; }
+            .nav-links a { display:block; padding:14px; }
+        }
+        @media(max-width:600px) {
+            .hero { min-height:520px; height:auto; padding:130px 20px 70px; background-attachment:scroll; }
+            .hero-content h1 { font-size:clamp(30px,8vw,42px); }
+            .section { padding:48px 18px; }
+            .section-title h2 { font-size:28px; }
+            .promo-grid,.cards-container { grid-template-columns:minmax(0,1fr); }
+            .promo-featured { grid-column:auto; }
+            .experience-card { width: min(300px,80vw); min-width:0; }
+            .footer-content { grid-template-columns:minmax(0,1fr); }
+            .nav-links { max-height:calc(100dvh - 70px); overflow-y:auto; }
+        }
+    </style>
 </head>
+
 <body>
-  <nav id="navbar">
-    <a class="brand" href="#inicio"><span class="brand-mark"><i class="fa-solid fa-water"></i></span>{{ settings.site_name }}</a>
-    <button class="menu-button" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
-    <div class="nav-links">
-      <a href="#servicios">Servicios</a><a href="#anuncios">Anuncios</a>
-      <a href="#promociones">Promociones</a><a href="#experiencias">Experiencias</a>
-      <a class="nav-cta" href="#contacto">Contacto</a>
-    </div>
-  </nav>
-  <header id="inicio" class="hero" style="--hero-image:url('{{ settings.hero_image }}')">
-    <div class="hero-glow"></div>
-    <div class="hero-content">
-      <span class="eyebrow"><i class="fa-solid fa-location-dot"></i> Playa del Carmen · Riviera Maya</span>
-      <h1>{{ settings.hero_title }}</h1><p>{{ settings.hero_text }}</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#experiencias">Explorar experiencias <i class="fa-solid fa-arrow-right"></i></a>
-        <a class="button glass" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Hablar con nosotros</a>
-      </div>
-    </div>
-    <a href="#servicios" class="scroll-cue" aria-label="Continuar"><span>Descubre</span><i class="fa-solid fa-chevron-down"></i></a>
-  </header>
-  <main>
-    {% set configurations = [
-      ('services','servicios',settings.services_title,settings.services_subtitle,'services-section'),
-      ('announcements','anuncios',settings.announcements_title,settings.announcements_subtitle,'announcements-section'),
-      ('promotions','promociones',settings.promotions_title,settings.promotions_subtitle,'promotions-section'),
-      ('experiences','experiencias',settings.experiences_title,settings.experiences_subtitle,'experiences-section')
-    ] %}
-    {% for kind,anchor,title,subtitle,css_class in configurations %}
-    <section id="{{ anchor }}" class="section {{ css_class }}">
-      <div class="section-heading"><span class="section-kicker">MAYADVENTURE</span><h2>{{ title }}</h2><p>{{ subtitle }}</p></div>
-      <div class="card-grid">
-        {% for item in sections[kind] %}
-        <article class="content-card {{ 'featured-card' if kind == 'promotions' and loop.first else '' }}">
-          <div class="card-image"><img src="{{ item.image or settings.hero_image }}" alt="{{ item.title }}" loading="lazy">{% if item.badge %}<span class="card-badge">{{ item.badge }}</span>{% endif %}</div>
-          <div class="card-body"><h3>{{ item.title }}</h3><p>{{ item.description }}</p>{% if item.button_text %}<a href="{{ item.link or '#contacto' }}" class="text-link">{{ item.button_text }} <i class="fa-solid fa-arrow-right"></i></a>{% endif %}</div>
-        </article>
-        {% else %}<p class="empty-public">Próximamente tendremos novedades para ti.</p>{% endfor %}
-      </div>
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="logo" data-i18n="site_name">{{ settings.site_name.es }}</div>
+        <ul class="nav-links">
+            <li><a id="nav-home" href="#home">Inicio</a></li>
+            <li><a id="nav-ferries" href="#ferries">Horarios</a></li>
+            <li><a id="nav-announcements" href="#announcements">Anuncios</a></li>
+            <li><a id="nav-map" href="#maps">Mapa</a></li>
+            <li><a id="nav-promotions" href="#promotions">Promociones</a></li>
+            <li><a id="nav-experiences" href="#experiences">Experiencias</a></li>
+        </ul>
+        <div class="nav-controls">
+            <div class="lang-switch">
+                <button id="btn-es" class="lang-btn active" type="button">ES</button>
+                <button id="btn-en" class="lang-btn" type="button">EN</button>
+            </div>
+            <button class="burger" type="button" aria-label="Abrir menú" aria-expanded="false">
+                <span aria-hidden="true">☰</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero" style="background-image:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.35)),url('{{ settings.hero_image.es }}')">
+        <div class="hero-content">
+            <h1 data-i18n="hero_title">{{ settings.hero_title.es }}</h1>
+            <p data-i18n="hero_subtitle">{{ settings.hero_subtitle.es }}</p>
+            <div class="hero-buttons">
+                <a href="#ferries" class="btn" data-i18n="hero_button">{{ settings.hero_button.es }}</a>
+            </div>
+        </div>
     </section>
-    {% endfor %}
-    <section id="contacto" class="contact-section">
-      <div><span class="section-kicker light">ESTAMOS PARA AYUDARTE</span><h2>{{ settings.contact_title }}</h2><p>{{ settings.contact_text }}</p></div>
-      <div class="contact-actions"><a class="button white" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a><a class="button glass" href="mailto:{{ settings.email }}"><i class="fa-regular fa-envelope"></i> Correo</a></div>
+
+
+
+
+
+
+    <!-- Ferry Section -->
+    <section id="ferries" class="section ferries-section">
+        <div class="section-title">
+            <h2 data-i18n="ferries_title">{{ settings.ferries_title.es }}</h2>
+            <p data-i18n="ferries_subtitle" class="section-subtitle">{{ settings.ferries_subtitle.es }}</p>
+        </div>
+
+        <div class="ferry-buttons-container">
+            {% for item in content.ferries %}<div class="ferry-button-card"><a href="{{ item.link or '#' }}" class="ferry-company-link" target="_blank" rel="noopener noreferrer"><img src="{{ item.image }}" alt="{{ item.title_es }}" class="ferry-button-logo"><span class="ferry-company-name" data-es="{{ item.title_es }}" data-en="{{ item.title_en or item.title_es }}">{{ item.title_es }}</span><span class="ferry-cta" data-es="{{ item.description_es }}" data-en="{{ item.description_en or item.description_es }}">{{ item.description_es }}</span></a></div>{% endfor %}
+        </div>
     </section>
-  </main>
-  <footer>
-    <div><a class="brand" href="#inicio"><span class="brand-mark"><i class="fa-solid fa-water"></i></span>{{ settings.site_name }}</a><p>{{ settings.footer_text }}</p></div>
-    <div><strong>Contacto</strong><p>{{ settings.address }}</p><a href="mailto:{{ settings.email }}">{{ settings.email }}</a></div>
-    <a class="admin-link" href="{{ url_for('login') }}"><i class="fa-solid fa-lock"></i> Administración</a>
-  </footer>
-  <a class="whatsapp-float" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-  <script>
-    const nav=document.querySelector('#navbar'),menu=document.querySelector('.menu-button'),links=document.querySelector('.nav-links');
-    addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
-    menu.addEventListener('click',()=>links.classList.toggle('open'));
-    document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
-  </script>
-</body></html>
+
+    <!-- Announcements Section -->
+    <section id="announcements" class="section announcements-section">
+        <div class="section-title">
+            <h2 data-i18n="announcements_title">{{ settings.announcements_title.es }}</h2>
+        </div>
+
+        <div class="cards-container">
+            {% for item in content.announcements %}<div class="announcement-card"><div class="announcement-img"><img src="{{ item.image }}" alt="{{ item.title_es }}"></div><div class="announcement-content"><h3 data-es="{{ item.title_es }}" data-en="{{ item.title_en or item.title_es }}">{{ item.title_es }}</h3><p data-es="{{ item.description_es }}" data-en="{{ item.description_en or item.description_es }}">{{ item.description_es }}</p>{% if item.button_es %}<a href="{{ item.link or '#' }}" class="btn btn-small" data-es="{{ item.button_es }}" data-en="{{ item.button_en or item.button_es }}">{{ item.button_es }}</a>{% endif %}</div></div>{% endfor %}
+        </div>
+    </section>
+
+    <!-- Maps Section -->
+    <section id="maps" class="section map-section">
+        <div class="section-title">
+            <h2 data-i18n="map_title">{{ settings.map_title.es }}</h2>
+        </div>
+
+        <div class="map-container">
+            {% if settings.map_link.es %}<a href="{{ settings.map_link.es }}" target="_blank" rel="noopener">{% endif %}<img class="tourist-map" src="{{ settings.map_image.es }}" alt="Mapa turístico de Playa del Carmen y Cozumel">{% if settings.map_link.es %}</a>{% endif %}
+        </div>
+    </section>
+
+    <!-- Promotions Section -->
+    <section id="promotions" class="section promotions-section">
+        <div class="section-title">
+            <h2 data-i18n="promotions_title">{{ settings.promotions_title.es }}</h2>
+            <p data-i18n="promotions_subtitle" class="section-subtitle">{{ settings.promotions_subtitle.es }}</p>
+        </div>
+
+        <div class="promo-grid">
+            {% for item in content.promotions %}<div class="promo-item {{ 'promo-featured' if loop.first }}">{% if item.badge %}<div class="promo-badge">{{ item.badge }}</div>{% endif %}<div class="promo-image" style="background-image:url('{{ item.image }}')"><div class="promo-overlay"></div></div><div class="promo-content">{% if item.meta_es %}<div class="promo-meta"><span class="promo-category" data-es="{{ item.meta_es }}" data-en="{{ item.meta_en or item.meta_es }}">{{ item.meta_es }}</span>{% if item.duration_es %}<span class="promo-duration" data-es="{{ item.duration_es }}" data-en="{{ item.duration_en or item.duration_es }}">{{ item.duration_es }}</span>{% endif %}</div>{% endif %}<h3 data-es="{{ item.title_es }}" data-en="{{ item.title_en or item.title_es }}">{{ item.title_es }}</h3><p data-es="{{ item.description_es }}" data-en="{{ item.description_en or item.description_es }}">{{ item.description_es }}</p>{% if item.price %}<div class="promo-price">{% if item.old_price %}<span class="old-price">{{ item.old_price }}</span>{% endif %}<span class="current-price {{ 'only' if not item.old_price }}">{{ item.price }}</span></div>{% endif %}{% if item.button_es %}<a href="{{ item.link or '#' }}" class="btn btn-promo" data-es="{{ item.button_es }}" data-en="{{ item.button_en or item.button_es }}">{{ item.button_es }}</a>{% endif %}</div></div>{% endfor %}
+        </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section id="experiences" class="section experiences-section">
+        <div class="section-title">
+            <h2 data-i18n="experiences_title">{{ settings.experiences_title.es }}</h2>
+            <p data-i18n="experiences_subtitle" class="section-subtitle">{{ settings.experiences_subtitle.es }}</p>
+        </div>
+
+        <div class="experience-slider">{% for item in content.experiences %}<div class="experience-card"><div class="exp-image-container"><img src="{{ item.image }}" alt="{{ item.title_es }}"></div><div class="exp-content"><h3 data-es="{{ item.title_es }}" data-en="{{ item.title_en or item.title_es }}">{{ item.title_es }}</h3><p data-es="{{ item.description_es }}" data-en="{{ item.description_en or item.description_es }}">{{ item.description_es }}</p>{% if item.button_es %}<a class="btn" href="{{ item.link or '#' }}" data-es="{{ item.button_es }}" data-en="{{ item.button_en or item.button_es }}">{{ item.button_es }}</a>{% endif %}</div></div>{% endfor %}</div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3 data-i18n="site_name">{{ settings.site_name.es }}</h3>
+                <p data-i18n="footer_location_1">{{ settings.footer_location_1.es }}</p>
+                <p data-i18n="footer_location_2">{{ settings.footer_location_2.es }}</p>
+                <div class="social-links">
+                    <a href="{{ settings.instagram.es }}"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ settings.facebook.es }}"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ settings.tripadvisor.es }}"><i class="fab fa-tripadvisor"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 id="footer-links-title">Enlaces rápidos</h3>
+                <a id="footer-link-ferries" href="#ferries">Horarios</a>
+                <a id="footer-link-announcements" href="#announcements">Anuncios</a>
+                <a id="footer-link-map" href="#maps">Mapa</a>
+                <a id="footer-link-promotions" href="#promotions">Promociones</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p data-i18n="copyright">{{ settings.copyright.es }}</p>
+            <a class="admin-access" href="{{ url_for('admin') }}" data-es="Administrar sitio" data-en="Manage website">Administrar sitio</a>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const burger = document.querySelector('.burger');
+        const navLinks = document.querySelector('.nav-links');
+
+        burger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            burger.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+            this.querySelector('span').textContent = navLinks.classList.contains('active') ? '×' : '☰';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                burger.setAttribute('aria-expanded', 'false');
+                burger.querySelector('span').textContent = '☰';
+            });
+        });
+
+        // Smooth scrolling for all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.getElementById(targetId.slice(1));
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Parallax Effect for Hero Section
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+
+            if (hero) {
+                hero.style.backgroundPositionY = scrollPosition * 0.3 + 'px';
+            }
+        });
+
+        const cmsTranslations = {{ settings | tojson }};
+        const fixedLabels = {
+            es: {'nav-home':'Inicio','nav-ferries':'Horarios','nav-announcements':'Anuncios','nav-map':'Mapa','nav-promotions':'Promociones','nav-experiences':'Experiencias','footer-links-title':'Enlaces rápidos','footer-link-ferries':'Horarios','footer-link-announcements':'Anuncios','footer-link-map':'Mapa','footer-link-promotions':'Promociones'},
+            en: {'nav-home':'Home','nav-ferries':'Schedules','nav-announcements':'Announcements','nav-map':'Map','nav-promotions':'Promotions','nav-experiences':'Experiences','footer-links-title':'Quick links','footer-link-ferries':'Schedules','footer-link-announcements':'Announcements','footer-link-map':'Map','footer-link-promotions':'Promotions'}
+        };
+        function applyCmsLanguage(lang) {
+            lang = lang === 'en' ? 'en' : 'es';
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const entry = cmsTranslations[el.dataset.i18n];
+                if (entry) el.textContent = entry[lang] || entry.es;
+            });
+            document.querySelectorAll('[data-es]').forEach(el => el.textContent = el.dataset[lang] || el.dataset.es);
+            Object.entries(fixedLabels[lang]).forEach(([id,text]) => { const el=document.getElementById(id); if(el) el.textContent=text; });
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            try { localStorage.setItem('mayadventure_lang', lang); } catch (_) {}
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            let lang = 'es'; try { lang = localStorage.getItem('mayadventure_lang') || 'es'; } catch (_) {}
+            applyCmsLanguage(lang);
+            document.getElementById('btn-es').addEventListener('click', () => applyCmsLanguage('es'));
+            document.getElementById('btn-en').addEventListener('click', () => applyCmsLanguage('en'));
+        });
+    </script>
+</body>

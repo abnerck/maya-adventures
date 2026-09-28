@@ -1,0 +1,96 @@
+"""Run with python -m unittest test_cms (isolated temporary database)."""
+import io
+import os
+import re
+import tempfile
+import unittest
+from pathlib import Path
+from PIL import Image
+
+_sandbox = tempfile.TemporaryDirectory()
+os.environ['MAYA_DATA_DIR'] = str(Path(_sandbox.name) / 'data')
+os.environ['MAYA_UPLOAD_DIR'] = str(Path(_sandbox.name) / 'uploads')
+os.environ['ADMIN_PASSWORD'] = 'Test-password-2026'
+import app as cms
+
+
+class CmsTests(unittest.TestCase):
+    def setUp(self):
+        self.client = cms.app.test_client()
+        page = self.client.get('/admin/login')
+        self.token = re.search(rb'name="_csrf" value="([^"]+)"', page.data)[1].decode()
+        response = self.client.post('/admin/login', data={'_csrf': self.token, 'username': 'admin', 'password': 'Test-password-2026'})
+        self.assertEqual(response.status_code, 302)
+        page = self.client.get('/admin')
+        self.token = re.search(rb'name="_csrf" value="([^"]+)"', page.data)[1].decode()
+
+    def test_access_and_csrf(self):
+        anonymous = cms.app.test_client()
+        self.assertEqual(anonymous.get('/admin').status_code, 302)
+        self.assertEqual(anonymous.post('/admin/login', data={}).status_code, 400)
+        self.assertEqual(self.client.post('/admin/settings', data={}).status_code, 400)
+
+    def test_settings_persist(self):
+        self.client.post('/admin/settings', data={'_csrf': self.token, 'hero_title_es': 'Mi nueva portada', 'hero_title_en': 'My new cover'})
+        page = cms.app.test_client().get('/').get_data(as_text=True)
+        self.assertIn('Mi nueva portada', page)
+        self.assertIn('My new cover', page)
+        cms.init_db()
+        self.assertIn('Mi nueva portada', self.client.get('/').get_data(as_text=True))
+
+    def test_full_item_lifecycle(self):
+        image = io.BytesIO()
+        Image.new('RGB', (100, 60), 'blue').save(image, 'PNG')
+        image.seek(0)
+        data = {'_csrf': self.token, 'kind': 'promotions', 'title_es': 'Prueba oferta', 'title_en': 'Test offer', 'position': '1', 'active': 'on', 'price': '$800', 'old_price': '$1000', 'duration_es': 'Todo el mes', 'image_upload': (image, 'photo.png')}
+        response = self.client.post('/admin/items/save', data=data, content_type='multipart/form-data')
+        self.assertEqual(response.status_code, 302)
+        with cms.db() as connection:
+            item = connection.execute("SELECT * FROM items WHERE title_es='Prueba oferta'").fetchone()
+        self.assertIsNotNone(item)
+        self.assertTrue((cms.UPLOAD_DIR / Path(item['image']).name).exists())
+        self.assertEqual(item['old_price'], '$1000')
+        self.assertIn('Prueba oferta', self.client.get('/').get_data(as_text=True))
+        data = {'_csrf': self.token, 'id': item['id'], 'kind': 'promotions', 'title_es': 'Oculta prueba', 'image': item['image'], 'position': 2}
+        self.client.post('/admin/items/save', data=data)
+        self.assertNotIn('Oculta prueba', self.client.get('/').get_data(as_text=True))
+        self.client.post(f"/admin/items/{item['id']}/delete", data={'_csrf': self.token, 'kind': 'promotions'})
+        with cms.db() as connection:
+            self.assertIsNone(connection.execute('SELECT id FROM items WHERE id=?', (item['id'],)).fetchone())
+
+    def test_reject_invalid_upload_and_link(self):
+        base = {'_csrf': self.token, 'kind': 'ferries', 'title_es': 'Invalid', 'active': 'on'}
+        result = self.client.post('/admin/items/save', data={**base, 'image_upload': (io.BytesIO(b'not an image'), 'fake.jpg')}, follow_redirects=True)
+        self.assertIn('No se pudo leer', result.get_data(as_text=True))
+        result = self.client.post('/admin/items/save', data={**base, 'link': 'javascript:alert(1)'}, follow_redirects=True)
+        self.assertIn('caracteres no permitidos', result.get_data(as_text=True))
+        with cms.db() as connection:
+            self.assertIsNone(connection.execute("SELECT id FROM items WHERE title_es='Invalid'").fetchone())
+
+    def test_empty_content_stays_empty(self):
+        with cms.db() as connection:
+            rows = connection.execute('SELECT * FROM items').fetchall()
+            connection.execute('DELETE FROM items')
+        cms.init_db()
+        with cms.db() as connection:
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM items').fetchone()[0], 0)
+            names = list(rows[0].keys())
+            connection.executemany(f"INSERT INTO items ({','.join(names)}) VALUES ({','.join('?' for _ in names)})", [tuple(row) for row in rows])
+
+    def test_password_and_logout(self):
+        updated = 'A-new-password-2026'
+        response = self.client.post('/admin/password', data={'_csrf': self.token, 'current_password': 'wrong-password', 'new_password': updated}, follow_redirects=True)
+        self.assertIn('no es correcta', response.get_data(as_text=True))
+        self.client.post('/admin/password', data={'_csrf': self.token, 'current_password': 'Test-password-2026', 'new_password': updated})
+        self.client.post('/admin/logout', data={'_csrf': self.token})
+        self.assertEqual(self.client.get('/admin').status_code, 302)
+        page = self.client.get('/admin/login')
+        token = re.search(rb'name="_csrf" value="([^"]+)"', page.data)[1].decode()
+        self.client.post('/admin/login', data={'_csrf': token, 'username': 'admin', 'password': updated})
+        self.assertEqual(self.client.get('/admin').status_code, 200)
+        with cms.db() as connection:
+            connection.execute('UPDATE users SET password_hash=? WHERE username=?', (cms.generate_password_hash('Test-password-2026'), 'admin'))
+
+
+if __name__ == '__main__':
+    unittest.main()

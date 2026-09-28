@@ -1,16 +1,8 @@
-<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Acceso | MAYADVENTURE</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"></head>
-<body class="login-page"><main class="login-card">
-  <a class="login-brand" href="{{ url_for('home') }}"><span><i class="fa-solid fa-water"></i></span> MAYADVENTURE</a>
-  <div class="login-heading"><small>PANEL DE CONTROL</small><h1>Bienvenido</h1><p>Ingresa tus datos de superusuario para administrar el sitio.</p></div>
-  {% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
-  <form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-    <label>Usuario<div class="input-icon"><i class="fa-regular fa-user"></i><input name="username" autocomplete="username" required autofocus></div></label>
-    <label>Contraseña<div class="input-icon"><i class="fa-solid fa-lock"></i><input type="password" name="password" autocomplete="current-password" required></div></label>
-    <button class="admin-button primary" type="submit">Ingresar <i class="fa-solid fa-arrow-right"></i></button>
-  </form><a class="back-link" href="{{ url_for('home') }}"><i class="fa-solid fa-arrow-left"></i> Volver al sitio</a>
-</main></body></html>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acceso | MAYADVENTURE</title>
+<style>*{box-sizing:border-box}input{font-size:16px;min-height:44px}.box{max-width:calc(100vw - 32px)}body{margin:0;background:#061d2b;font-family:Arial;color:#183342;display:grid;place-items:center;min-height:100vh}.box{background:#fff;width:min(380px,85vw);padding:35px;border-radius:18px;box-shadow:0 20px 60px #0008}h1{margin:0;color:#073b4c}p{color:#667}label{display:block;font-weight:bold;margin:18px 0 6px}input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #ccd5da;border-radius:8px}button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:8px;background:#e8a020;color:#fff;font-weight:bold;cursor:pointer}.error{background:#ffe1e1;color:#8d2020;padding:10px;border-radius:8px}
+body{background:linear-gradient(110deg,rgba(11,43,48,.92),rgba(11,43,48,.6)),url('/static/img/Muelle.jpg') center/cover fixed;font-family:'Segoe UI',Arial,sans-serif;padding:24px 0}
+.box{background:#fffcf5;border:1px solid #e4dece;border-radius:22px;width:min(420px,calc(100vw - 32px));padding:36px;box-shadow:0 24px 70px #001f2780}
+h1{color:#173f40;letter-spacing:.05em;font-size:24px}p{color:#61756b;font-size:14px;line-height:1.6}label{font-size:13px;color:#3d5653}input{background:#f2f3e9;border-color:#d1dbce;font-size:16px;min-height:48px;color:#203b3e}input:focus{outline:3px solid #d9e7d4;border-color:#52816e}button{background:#17685f;min-height:48px;font-size:14px;border-radius:10px}button:hover{background:#105248}a{color:#17685f} .box:before{content:'TU SITIO, A TU MANERA';display:block;color:#927047;font-weight:700;font-size:10px;letter-spacing:.15em;margin-bottom:18px}
+</style></head>
+<body><main class="box"><h1>MAYADVENTURE</h1><p>Panel de administración</p>{% for category,message in get_flashed_messages(with_categories=true) %}<div class="{{ category }}">{{ message }}</div>{% endfor %}
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><label>Usuario</label><input name="username" autocomplete="username" required autofocus><label>Contraseña</label><input type="password" name="password" autocomplete="current-password" required><button>Entrar</button></form><p><a href="{{ url_for('home') }}">Volver al sitio</a></p></main></body></html>
