@@ -1,4 +1,4 @@
-﻿# Maya Adventure
+# Maya Adventure
 
 Sitio Flask con panel visual y responsivo en /admin. Permite editar portada, textos, fotos, mapa, ferris, anuncios, promociones y experiencias en español e inglés.
 
@@ -62,4 +62,8 @@ Resolver cualquier modificación local o conflicto antes de seguir. Pulsar Reloa
 
 python -m unittest test_cms -v
 
-Las seis pruebas usan una base temporal y comprueban acceso, CSRF, persistencia, imágenes, contenido y contraseña.
+Las ocho pruebas usan una base temporal y comprueban acceso, CSRF, persistencia, imágenes, contenido y contraseña.
+
+## Restauraci?n de la landing original
+
+La actualizaci?n restaura portada, subrayado de MAYA, subt?tulo de experiencias y textos originales de anuncios y promociones. Conserva el panel, las traducciones de experiencias y los ajustes m?viles. En el primer inicio, guarda una copia de la base existente en data/before-original-landing-v1.sqlite3 y corrige ?nicamente los valores predeterminados de la versi?n anterior. La migraci?n se ejecuta una sola vez y conserva usuarios y contenido personalizado. El precio o texto destacado en ingl?s ahora es editable dentro de la traducci?n de promociones.

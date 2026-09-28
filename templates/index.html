@@ -892,7 +892,7 @@
 <body>
     <!-- Navbar -->
     <nav id="navbar">
-        <div class="logo" data-i18n="site_name">{{ settings.site_name.es }}</div>
+        <div class="logo" data-i18n="site_name">{% if settings.site_name.es == "MAYADVENTURE" %}<span class="logo-maya">MAYA</span>ADVENTURE{% else %}{{ settings.site_name.es }}{% endif %}</div>
         <ul class="nav-links">
             <li><a id="nav-home" href="#home">Inicio</a></li>
             <li><a id="nav-ferries" href="#ferries">Horarios</a></li>
@@ -913,7 +913,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero" style="background-image:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.35)),url('{{ settings.hero_image.es }}')">
+    <section id="home" class="hero" style="background-image:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),url('{{ settings.hero_image.es }}')">
         <div class="hero-content">
             <h1 data-i18n="hero_title">{{ settings.hero_title.es }}</h1>
             <p data-i18n="hero_subtitle">{{ settings.hero_subtitle.es }}</p>
@@ -970,7 +970,7 @@
         </div>
 
         <div class="promo-grid">
-            {% for item in content.promotions %}<div class="promo-item {{ 'promo-featured' if loop.first }}">{% if item.badge %}<div class="promo-badge">{{ item.badge }}</div>{% endif %}<div class="promo-image" style="background-image:url('{{ item.image }}')"><div class="promo-overlay"></div></div><div class="promo-content">{% if item.meta_es %}<div class="promo-meta"><span class="promo-category" data-es="{{ item.meta_es }}" data-en="{{ item.meta_en or item.meta_es }}">{{ item.meta_es }}</span>{% if item.duration_es %}<span class="promo-duration" data-es="{{ item.duration_es }}" data-en="{{ item.duration_en or item.duration_es }}">{{ item.duration_es }}</span>{% endif %}</div>{% endif %}<h3 data-es="{{ item.title_es }}" data-en="{{ item.title_en or item.title_es }}">{{ item.title_es }}</h3><p data-es="{{ item.description_es }}" data-en="{{ item.description_en or item.description_es }}">{{ item.description_es }}</p>{% if item.price %}<div class="promo-price">{% if item.old_price %}<span class="old-price">{{ item.old_price }}</span>{% endif %}<span class="current-price {{ 'only' if not item.old_price }}">{{ item.price }}</span></div>{% endif %}{% if item.button_es %}<a href="{{ item.link or '#' }}" class="btn btn-promo" data-es="{{ item.button_es }}" data-en="{{ item.button_en or item.button_es }}">{{ item.button_es }}</a>{% endif %}</div></div>{% endfor %}
+            {% for item in content.promotions %}<div class="promo-item {{ 'promo-featured' if loop.first }}">{% if item.badge %}<div class="promo-badge">{{ item.badge }}</div>{% endif %}<div class="promo-image" style="background-image:url('{{ item.image }}')"><div class="promo-overlay"></div></div><div class="promo-content">{% if item.meta_es %}<div class="promo-meta"><span class="promo-category" data-es="{{ item.meta_es }}" data-en="{{ item.meta_en or item.meta_es }}">{{ item.meta_es }}</span>{% if item.duration_es %}<span class="promo-duration" data-es="{{ item.duration_es }}" data-en="{{ item.duration_en or item.duration_es }}">{{ item.duration_es }}</span>{% endif %}</div>{% endif %}<h3 data-es="{{ item.title_es }}" data-en="{{ item.title_en or item.title_es }}">{{ item.title_es }}</h3><p data-es="{{ item.description_es }}" data-en="{{ item.description_en or item.description_es }}">{{ item.description_es }}</p>{% if item.price %}<div class="promo-price">{% if item.old_price %}<span class="old-price">{{ item.old_price }}</span>{% endif %}<span class="current-price {{ 'only' if item.price == 'Oferta especial' }}" data-es="{{ item.price }}" data-en="{{ item.price_en or item.price }}">{{ item.price }}</span></div>{% endif %}{% if item.button_es %}<a href="{{ item.link or '#' }}" class="btn btn-promo" data-es="{{ item.button_es }}" data-en="{{ item.button_en or item.button_es }}">{{ item.button_es }}</a>{% endif %}</div></div>{% endfor %}
         </div>
     </section>
 
@@ -1080,7 +1080,16 @@
             document.documentElement.lang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const entry = cmsTranslations[el.dataset.i18n];
-                if (entry) el.textContent = entry[lang] || entry.es;
+                if (entry) {
+                    const value = entry[lang] || entry.es;
+                    el.textContent = value;
+                    if (el.classList.contains('logo') && value === 'MAYADVENTURE') {
+                        const maya = document.createElement('span');
+                        maya.className = 'logo-maya';
+                        maya.textContent = 'MAYA';
+                        el.replaceChildren(maya, document.createTextNode('ADVENTURE'));
+                    }
+                }
             });
             document.querySelectorAll('[data-es]').forEach(el => el.textContent = el.dataset[lang] || el.dataset.es);
             Object.entries(fixedLabels[lang]).forEach(([id,text]) => { const el=document.getElementById(id); if(el) el.textContent=text; });

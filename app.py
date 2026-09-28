@@ -45,7 +45,7 @@ DEFAULT_SETTINGS = {
     "hero_title": ("Descubre la isla de Cozumel y Playa del Carmen", "Discover Cozumel Island and Playa del Carmen"),
     "hero_subtitle": ("Conviértete en tu propio guía y vive cada aventura a tu ritmo", "Become your own guide and enjoy each adventure at your pace"),
     "hero_button": ("Horarios de ferry", "Ferry schedules"),
-    "hero_image": ("/static/img/Muelle.jpg", "/static/img/Muelle.jpg"),
+    "hero_image": ("https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"),
     "ferries_title": ("Servicio de Ferry Cozumel–Playa del Carmen", "Cozumel–Playa del Carmen ferry service"),
     "ferries_subtitle": ("Ultramar, Winjet, Xcaret Xailing", "Ultramar, Winjet, Xcaret Xailing"),
     "announcements_title": ("Anuncios importantes", "Important announcements"),
@@ -55,7 +55,7 @@ DEFAULT_SETTINGS = {
     "promotions_title": ("Promociones especiales", "Special promotions"),
     "promotions_subtitle": ("Aprovecha nuestras promociones destacadas", "Take advantage of our featured deals"),
     "experiences_title": ("Experiencias", "Experiences"),
-    "experiences_subtitle": ("Descubre actividades inolvidables", "Discover unforgettable activities"),
+    "experiences_subtitle": ("Contenido dinámico: agrega o elimina experiencias fácilmente", "Dynamic content: add or remove experiences anytime"),
     "footer_location_1": ("Playa del Carmen, Quintana Roo", "Playa del Carmen, Quintana Roo"),
     "footer_location_2": ("Conexión principal a Cozumel", "Main connection to Cozumel"),
     "instagram": ("#", "#"), "facebook": ("#", "#"), "tripadvisor": ("#", "#"),
@@ -66,12 +66,12 @@ SEED_ITEMS = [
     ("ferries", "Ultramar", "Ultramar", "Ver horarios y boletos", "View schedules and tickets", "/static/img/ultramar.png", "https://www.ultramarferry.com/es/rutas-y-horarios", "", "", "", "", 1),
     ("ferries", "Winjet", "Winjet", "Ver horarios y boletos", "View schedules and tickets", "/static/img/winjet.png", "https://winjet.mx/", "", "", "", "", 2),
     ("ferries", "Xcaret Xailing", "Xcaret Xailing", "Ver horarios y boletos", "View schedules and tickets", "/static/img/xcaret.png", "https://www.xailing.com/es/rutas-horarios/", "", "", "", "", 3),
-    ("announcements", "Terminal segura", "Secure terminal", "Estamos al día con la seguridad y seguimos mejorando nuestras instalaciones para hacer la terminal marítima más segura de México.", "We stay up to date with safety standards and continuously improve our facilities.", "/static/img/terminal-segura.png", "#ferries", "Ver horarios", "View schedules", "", "", "", "", 1),
-    ("announcements", "Mantenimiento programado", "Scheduled maintenance", "El muelle principal podrá estar en mantenimiento en fechas programadas. Agradecemos tu comprensión.", "The main pier may be closed for scheduled maintenance on certain dates.", "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80", "#contact", "Más información", "More info", "", "", "", "", 2),
-    ("announcements", "Semana Santa", "Holy Week", "Son días de alto tránsito en la ruta de navegación entre la isla y el continente. Sea paciente en las filas y disfrute de la vista.", "These are high-traffic days on the route between the island and mainland. Please be patient and enjoy the view.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", "#ferries", "Ver horarios", "View schedules", "", "", "", "", 3),
+    ("announcements", "Terminal segura", "Secure terminal", "Estamos al día con la seguridad y seguimos mejorando nuestras instalaciones para hacer la terminal marítima más segura de México.", "We stay up to date with safety standards and continuously improve our facilities to make this maritime terminal one of the safest in Mexico.", "/static/img/terminal-segura.png", "#ferries", "Ver horarios", "View schedules", "", "", "", "", 1),
+    ("announcements", "Mantenimiento programado", "Scheduled maintenance", "El muelle principal podrá estar en mantenimiento en fechas programadas. Agradecemos tu comprensión.", "The main pier may be closed for scheduled maintenance on certain dates. Thank you for your understanding.", "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80", "#contact", "Más información", "More info", "", "", "", "", 2),
+    ("announcements", "Semana Santa", "Holy Week", "Son días de alto tránsito en la ruta de navegación entre la isla y el continente. Sea paciente en las filas y disfrute de la vista.", "These are high-traffic days on the route between the island and the mainland. Please be patient in line and enjoy the view.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", "#ferries", "Ver horarios", "View schedules", "", "", "", "", 3),
     ("promotions", "Paquete familiar", "Family package", "Descuento especial para familias de 4 o más personas en servicios de ferry.", "Special discount for families of 4 or more on ferry services.", "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80", "#contact", "Reservar", "Book now", "-20%", "Familia", "Family", "$960", 1),
     ("promotions", "Tour + Ferry", "Tour + Ferry", "Reserva cualquier tour y obtén tu ferry redondo sin costo.", "Book any tour and get your round-trip ferry ticket at no cost.", "https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=800&q=80", "#contact", "Más información", "More information", "2x1", "Combo", "Combo", "Oferta especial", 2),
-    ("promotions", "Verano 2026", "Summer 2026", "Paquete todo incluido: ferry, hotel y actividades con descuento especial.", "All-inclusive package: ferry, hotel and activities with a special discount.", "https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?auto=format&fit=crop&w=800&q=80", "#contact", "Ver paquetes", "View packages", "15% OFF", "Julio-agosto", "July-August", "Desde $2,500", 3),
+    ("promotions", "Verano 2026", "Summer 2026", "Paquete todo incluido: ferry, hotel y actividades con descuento especial.", "All-inclusive package: ferry, hotel, and activities with a special discount.", "https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?auto=format&fit=crop&w=800&q=80", "#contact", "Ver paquetes", "View packages", "15% OFF", "Julio-agosto", "July-August", "Desde $2,500", 3),
     ("experiences", "Snorkel en Cozumel", "Snorkeling in Cozumel", "Explora arrecifes cristalinos con guías locales certificados.", "Explore crystal-clear reefs with certified local guides.", "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?auto=format&fit=crop&w=1000&q=80", "", "", "", "", "", "", "", 1),
     ("experiences", "Ruta local en Playa del Carmen", "Local route in Playa del Carmen", "Recorre la ciudad con recomendaciones para comer, pasear y disfrutar.", "Explore the city with recommendations for dining, walking and enjoying.", "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80", "", "", "", "", "", "", "", 2),
 ]
@@ -92,6 +92,15 @@ def db():
 
 def init_db():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    backup = DATA_DIR / 'before-original-landing-v1.sqlite3'
+    if DB_PATH.exists() and not backup.exists():
+        source = sqlite3.connect(DB_PATH)
+        destination = sqlite3.connect(backup)
+        try:
+            source.backup(destination)
+        finally:
+            destination.close()
+            source.close()
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
     with db() as connection:
         connection.executescript("""
@@ -109,7 +118,7 @@ def init_db():
             );
         """)
         columns = {row[1] for row in connection.execute("PRAGMA table_info(items)")}
-        for column in ("duration_es", "duration_en", "old_price"):
+        for column in ("duration_es", "duration_en", "old_price", "price_en"):
             if column not in columns:
                 connection.execute(f"ALTER TABLE items ADD COLUMN {column} TEXT NOT NULL DEFAULT ''")
         for key, values in DEFAULT_SETTINGS.items():
@@ -133,6 +142,19 @@ def init_db():
                 connection.execute("UPDATE items SET duration_es=?,duration_en=?,old_price=? WHERE kind='promotions' AND title_es=?", (duration_es, duration_en, old_price, title))
             connection.execute("UPDATE items SET meta_es='Paquete',meta_en='Package' WHERE title_es='Verano 2026'")
             connection.execute("INSERT INTO settings(key,value_es,value_en) VALUES ('content_initialized','1','1')")
+        # Restore only untouched defaults from the first CMS release, once.
+        if not connection.execute("SELECT 1 FROM settings WHERE key='original_landing_v1'").fetchone():
+            connection.execute("UPDATE settings SET value_es=? WHERE key=? AND value_es=?", ('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80', 'hero_image', '/static/img/Muelle.jpg'))
+            connection.execute("UPDATE settings SET value_en=? WHERE key=? AND value_en=?", ('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80', 'hero_image', '/static/img/Muelle.jpg'))
+            connection.execute("UPDATE settings SET value_es=? WHERE key=? AND value_es=?", ('Contenido dinámico: agrega o elimina experiencias fácilmente', 'experiences_subtitle', 'Descubre actividades inolvidables'))
+            connection.execute("UPDATE settings SET value_en=? WHERE key=? AND value_en=?", ('Dynamic content: add or remove experiences anytime', 'experiences_subtitle', 'Discover unforgettable activities'))
+            connection.execute("UPDATE items SET description_en=? WHERE title_es=? AND description_en=? AND kind IN ('announcements','promotions')", ('We stay up to date with safety standards and continuously improve our facilities to make this maritime terminal one of the safest in Mexico.', 'Terminal segura', 'We stay up to date with safety standards and continuously improve our facilities.'))
+            connection.execute("UPDATE items SET description_en=? WHERE title_es=? AND description_en=? AND kind IN ('announcements','promotions')", ('The main pier may be closed for scheduled maintenance on certain dates. Thank you for your understanding.', 'Mantenimiento programado', 'The main pier may be closed for scheduled maintenance on certain dates.'))
+            connection.execute("UPDATE items SET description_en=? WHERE title_es=? AND description_en=? AND kind IN ('announcements','promotions')", ('These are high-traffic days on the route between the island and the mainland. Please be patient in line and enjoy the view.', 'Semana Santa', 'These are high-traffic days on the route between the island and mainland. Please be patient and enjoy the view.'))
+            connection.execute("UPDATE items SET description_en=? WHERE title_es=? AND description_en=? AND kind IN ('announcements','promotions')", ('All-inclusive package: ferry, hotel, and activities with a special discount.', 'Verano 2026', 'All-inclusive package: ferry, hotel and activities with a special discount.'))
+            connection.execute("UPDATE items SET price_en=? WHERE kind='promotions' AND title_es=? AND price=? AND price_en=''", ('Special offer', 'Tour + Ferry', 'Oferta especial'))
+            connection.execute("UPDATE items SET price_en=? WHERE kind='promotions' AND title_es=? AND price=? AND price_en=''", ('From $2,500', 'Verano 2026', 'Desde $2,500'))
+            connection.execute("INSERT INTO settings(key,value_es,value_en) VALUES ('original_landing_v1','1','1')")
 
 
 def csrf_token():
@@ -275,13 +297,13 @@ def save_item():
         request.form.get("button_es", "").strip(), request.form.get("button_en", "").strip(),
         request.form.get("badge", "").strip(), request.form.get("meta_es", "").strip(), request.form.get("meta_en", "").strip(),
         request.form.get("price", "").strip(), position, 1 if request.form.get("active") else 0,
-        request.form.get("duration_es", "").strip(), request.form.get("duration_en", "").strip(), request.form.get("old_price", "").strip(),
+        request.form.get("duration_es", "").strip(), request.form.get("duration_en", "").strip(), request.form.get("old_price", "").strip(), request.form.get("price_en", "").strip(),
     )
     with db() as connection:
         if item_id:
-            connection.execute("""UPDATE items SET title_es=?,title_en=?,description_es=?,description_en=?,image=?,link=?,button_es=?,button_en=?,badge=?,meta_es=?,meta_en=?,price=?,position=?,active=?,duration_es=?,duration_en=?,old_price=? WHERE id=? AND kind=?""", values + (item_id, kind))
+            connection.execute("""UPDATE items SET title_es=?,title_en=?,description_es=?,description_en=?,image=?,link=?,button_es=?,button_en=?,badge=?,meta_es=?,meta_en=?,price=?,position=?,active=?,duration_es=?,duration_en=?,old_price=?,price_en=? WHERE id=? AND kind=?""", values + (item_id, kind))
         else:
-            connection.execute("""INSERT INTO items (title_es,title_en,description_es,description_en,image,link,button_es,button_en,badge,meta_es,meta_en,price,position,active,duration_es,duration_en,old_price,kind) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", values + (kind,))
+            connection.execute("""INSERT INTO items (title_es,title_en,description_es,description_en,image,link,button_es,button_en,badge,meta_es,meta_en,price,position,active,duration_es,duration_en,old_price,price_en,kind) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", values + (kind,))
     flash("Elemento guardado.", "success")
     return redirect(url_for("admin", section=kind))
 

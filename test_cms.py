@@ -4,6 +4,7 @@ import os
 import re
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from PIL import Image
 
@@ -15,6 +16,41 @@ import app as cms
 
 
 class CmsTests(unittest.TestCase):
+    def test_original_landing_migration_preserves_edits(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            with patch.object(cms, 'DATA_DIR', root), patch.object(cms, 'DB_PATH', root / 'site.db'), patch.object(cms, 'UPLOAD_DIR', root / 'uploads'):
+                cms.init_db()
+                with cms.db() as connection:
+                    user = tuple(connection.execute('SELECT username,password_hash FROM users').fetchone())
+                    connection.execute("DELETE FROM settings WHERE key='original_landing_v1'")
+                    connection.execute("UPDATE settings SET value_es='/static/img/Muelle.jpg',value_en='/static/uploads/custom.jpg' WHERE key='hero_image'")
+                    connection.execute("UPDATE items SET description_en='Customer text' WHERE title_es='Terminal segura'")
+                    connection.execute("UPDATE items SET description_en='The main pier may be closed for scheduled maintenance on certain dates.' WHERE title_es='Mantenimiento programado'")
+                    connection.execute("UPDATE items SET price_en='' WHERE title_es='Tour + Ferry'")
+                cms.init_db()
+                self.assertTrue((root / 'before-original-landing-v1.sqlite3').exists())
+                with cms.db() as connection:
+                    hero = connection.execute("SELECT value_es,value_en FROM settings WHERE key='hero_image'").fetchone()
+                    self.assertIn('photo-1544551763', hero[0])
+                    self.assertEqual(hero[1], '/static/uploads/custom.jpg')
+                    self.assertEqual(tuple(connection.execute('SELECT username,password_hash FROM users').fetchone()), user)
+                    self.assertEqual(connection.execute("SELECT description_en FROM items WHERE title_es='Terminal segura'").fetchone()[0], 'Customer text')
+                    self.assertIn('Thank you for your understanding.', connection.execute("SELECT description_en FROM items WHERE title_es='Mantenimiento programado'").fetchone()[0])
+                    self.assertEqual(connection.execute("SELECT price_en FROM items WHERE title_es='Tour + Ferry'").fetchone()[0], 'Special offer')
+                    connection.execute("UPDATE settings SET value_es='/static/img/Muelle.jpg' WHERE key='hero_image'")
+                cms.init_db()
+                with cms.db() as connection:
+                    self.assertEqual(connection.execute("SELECT value_es FROM settings WHERE key='hero_image'").fetchone()[0], '/static/img/Muelle.jpg')
+
+    def test_promotion_english_price_persists(self):
+        self.client.post('/admin/items/save', data={'_csrf': self.token, 'kind': 'promotions', 'title_es': 'Precio bilingue', 'price': 'Desde $500', 'price_en': 'From $500', 'active': 'on'})
+        with cms.db() as connection:
+            item = connection.execute("SELECT * FROM items WHERE title_es='Precio bilingue'").fetchone()
+            self.assertEqual(item['price_en'], 'From $500')
+        page = self.client.get('/').get_data(as_text=True)
+        self.assertIn('data-en="From $500"', page)
+
     def setUp(self):
         self.client = cms.app.test_client()
         page = self.client.get('/admin/login')
