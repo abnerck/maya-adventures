@@ -13,3 +13,6 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 .field input,.field textarea{font-weight:400}.switch{min-height:44px}.sidebar{overflow-y:auto}
+
+/* Preserve the full uploaded image in the editor and collection cards. */
+.photo-preview img,.card-image img{object-fit:contain;background:#eef0e9}

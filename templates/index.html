@@ -886,6 +886,14 @@
             .footer-content { grid-template-columns:minmax(0,1fr); }
             .nav-links { max-height:calc(100dvh - 70px); overflow-y:auto; }
         }
+    /* Show complete photos, including portrait flyers. */
+        .announcement-img, .exp-image-container, .promo-image { background-color:#f2f3ef; }
+        .announcement-img img, .exp-image-container img { object-fit:contain; }
+        .announcement-card:hover .announcement-img img,
+        .experience-card:hover .exp-image-container img { transform:none; }
+        .promo-image { background-size:contain; background-repeat:no-repeat; }
+        .promo-overlay { display:none; }
+        .hero.hero-uploaded { background-size:contain; background-repeat:no-repeat; background-attachment:scroll; background-color:#101820; }
     </style>
 </head>
 
@@ -913,7 +921,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero" style="background-image:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),url('{{ settings.hero_image.es }}')">
+    <section id="home" class="hero {{ 'hero-uploaded' if settings.hero_image.es.startswith('/static/uploads/') }}" style="background-image:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),url('{{ settings.hero_image.es }}')">
         <div class="hero-content">
             <h1 data-i18n="hero_title">{{ settings.hero_title.es }}</h1>
             <p data-i18n="hero_subtitle">{{ settings.hero_subtitle.es }}</p>

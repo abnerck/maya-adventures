@@ -1,6 +1,8 @@
 import os
 import secrets
 import sqlite3
+import json
+from translation import translate_texts
 from functools import wraps
 from contextlib import contextmanager
 from pathlib import Path
@@ -189,6 +191,23 @@ def safe_url(value):
     if value.startswith('//'):
         raise ValueError("Usa la dirección completa con https://.")
     return value
+
+
+@app.post('/admin/translate')
+@login_required
+def translate():
+    validate_csrf()
+    try:
+        texts = json.loads(request.form.get('texts', '[]'))
+        if (not isinstance(texts, list) or not 1 <= len(texts) <= 30
+                or any(not isinstance(text, str) or not text.strip() for text in texts)
+                or sum(len(text) for text in texts) > 12000):
+            return {'error': 'Envía entre 1 y 30 textos, con un máximo de 12000 caracteres.'}, 400
+        return {'translations': translate_texts(texts)}
+    except json.JSONDecodeError:
+        return {'error': 'Solicitud de traducción inválida.'}, 400
+    except ValueError as error:
+        return {'error': str(error)}, 503
 
 
 def save_image(file):

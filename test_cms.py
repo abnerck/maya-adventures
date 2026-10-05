@@ -16,6 +16,36 @@ import app as cms
 
 
 class CmsTests(unittest.TestCase):
+    def test_translation_is_authenticated_and_does_not_publish(self):
+        anonymous = cms.app.test_client()
+        self.assertEqual(anonymous.post('/admin/translate').status_code, 302)
+        self.assertEqual(self.client.post('/admin/translate').status_code, 400)
+        before = self.client.get('/').data
+        with patch.object(cms, 'translate_texts', return_value=['Hello']) as service:
+            result = self.client.post('/admin/translate', data={'_csrf': self.token, 'texts': '["Hola"]'})
+            self.assertEqual(result.json, {'translations': ['Hello']})
+            service.assert_called_once_with(['Hola'])
+        self.assertEqual(self.client.get('/').data, before)
+        for invalid in ['null', '{}', '[1]', '[]', 'bad json']:
+            self.assertEqual(self.client.post('/admin/translate', data={'_csrf': self.token, 'texts': invalid}).status_code, 400)
+        with patch.object(cms, 'translate_texts', side_effect=ValueError('Service unavailable')):
+            self.assertEqual(self.client.post('/admin/translate', data={'_csrf': self.token, 'texts': '["Hola"]'}).status_code, 503)
+
+    def test_translation_adapter(self):
+        import translation
+        from unittest.mock import MagicMock
+        import json
+        response = MagicMock()
+        response.__enter__.return_value.read.return_value = '{"translations":[{"text":"Hello"}]}'
+        with patch.dict(os.environ, {'DEEPL_API_KEY': 'test:fx'}), patch.object(translation, 'urlopen', return_value=response) as send:
+            self.assertEqual(translation.translate_texts(['Hola']), ['Hello'])
+            request = send.call_args.args[0]
+            self.assertEqual(request.full_url, 'https://api-free.deepl.com/v2/translate')
+            self.assertEqual(json.loads(request.data)['source_lang'], 'ES')
+        with patch.dict(os.environ, {'DEEPL_API_KEY': ''}):
+            with self.assertRaises(ValueError):
+                translation.translate_texts(['Hola'])
+
     def test_original_landing_migration_preserves_edits(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
